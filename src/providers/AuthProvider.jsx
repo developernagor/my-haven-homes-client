@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStat
 import auth from '../../src/firebase/firebase.config';
 
 const googleProvider = new GoogleAuthProvider();
-export const AuthContext = createContext();
+export const AuthContext = createContext(null);
 
 function AuthProvider({children}) {
 
@@ -22,6 +22,7 @@ function AuthProvider({children}) {
 
     const signInUser = (email, password) => {
         setLoading(true);
+        
         return signInWithEmailAndPassword(auth, email, password);
         
     }
@@ -39,7 +40,7 @@ function AuthProvider({children}) {
     
 
     useEffect(() => {
-        const auth = getAuth();
+        // const auth = getAuth();
 
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
@@ -69,8 +70,8 @@ function AuthProvider({children}) {
         
     );
 }
-export const useAuth = () => {
-    return useContext(AuthContext);
-  };
+// export const useAuth = () => {
+//     return useContext(AuthContext);
+//   };
 
 export default AuthProvider;
