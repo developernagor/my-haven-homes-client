@@ -9,13 +9,14 @@ import Login from "../components/Login/Login";
 import Register from "../components/Register/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
+import ErrorPage from "../components/ErrorPage/ErrorPage";
 
 
   const router = createBrowserRouter([
     {
       path: "/",
       element: <MainLayout></MainLayout>,
-      errorElement: <div>Error</div>,
+      errorElement: <ErrorPage></ErrorPage>,
       children: [
         {
             path: '/',
