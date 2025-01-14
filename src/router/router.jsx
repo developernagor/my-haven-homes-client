@@ -8,6 +8,7 @@ import AllProperties from "../pages/AllProperties/AllProperties";
 import Login from "../components/Login/Login";
 import Register from "../components/Register/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
+import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
 
 
   const router = createBrowserRouter([
@@ -22,7 +23,9 @@ import Dashboard from "../pages/Dashboard/Dashboard";
         },
         {
           path: '/all-properties',
-          element: <AllProperties></AllProperties>
+          element: <PrivateRoute>
+            <AllProperties></AllProperties>
+          </PrivateRoute>
         },
         {
           path: '/login',
@@ -34,7 +37,9 @@ import Dashboard from "../pages/Dashboard/Dashboard";
         },
         {
           path: '/dashboard',
-          element: <Dashboard></Dashboard>
+          element: <PrivateRoute>
+            <Dashboard></Dashboard>
+          </PrivateRoute>
         }
       ]
     },

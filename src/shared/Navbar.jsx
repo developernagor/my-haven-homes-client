@@ -1,14 +1,39 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/favicon.png'
+import { AuthContext } from '../providers/AuthProvider';
 
 function Navbar() {
 
     const links = <>
-    <Link to="/"><li className=''>Home</li></Link>
-    <Link to="/all-properties"><li className=''>All Properties</li></Link>
-    <Link to="/dashboard"><li className=''>Dashboard</li></Link>
+    <Link to="/" className={({ isActive }) =>
+          isActive ? "bg-gray-200 px-3 py-1 rounded-lg" : "px-3 py-1"
+        }><li className=''>Home</li></Link>
+    <Link to="/all-properties" className={({ isActive }) =>
+          isActive ? "bg-gray-200 px-3 py-1 rounded-lg" : "px-3 py-1"
+        }><li className=''>All Properties</li></Link>
+    <Link to="/dashboard" className={({ isActive }) =>
+          isActive ? "bg-gray-200 px-3 py-1 rounded-lg" : "px-3 py-1"
+        }><li className=''>Dashboard</li></Link>
     </>
+
+    const {user, signOutUser} = useContext(AuthContext);
+    console.log(user)
+
+    // const {email, displayName} = user;
+    // console.log(email, displayName)
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+      signOutUser()
+          .then(() => {
+              console.log('successful sign out')
+              navigate('/login')
+          })
+          .catch(error => {
+              console.log('failed to sign out .stay here. dont leave me alone')
+          })
+  }
 
 
 
@@ -45,7 +70,30 @@ function Navbar() {
     </ul>
   </div>
   <div className="navbar-end">
-    <Link to="/login"><button className='btn'>Login</button></Link>
+  {user ? (
+          <div className="flex items-center gap-3">
+            <div className="tooltip" data-tip={user?.displayName || "User"}>
+              <img
+                src={user.photoURL || "/default-avatar.png"}
+                alt={`Avatar of ${user?.displayName || "default user"}`}
+                className="w-8 h-8 rounded-full cursor-pointer"
+              />
+            </div>
+            <button
+              onClick={handleLogOut}
+              className="border rounded-lg px-4 py-1 bg-purple-600 text-white font-semibold"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <Link
+            to="/login"
+            className="border rounded-lg px-4 py-1 bg-purple-600 text-white font-semibold"
+          >
+            Login
+          </Link>
+        )}
   </div>
 </div>
     );

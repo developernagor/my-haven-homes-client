@@ -12,9 +12,6 @@ function AuthProvider({children}) {
 
     console.log(user)
 
-    // const {email, displayName} = user;
-
-
     const createUser = (email, password) => {
         setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
@@ -40,7 +37,7 @@ function AuthProvider({children}) {
     
 
     useEffect(() => {
-        // const auth = getAuth();
+        const auth = getAuth();
 
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
@@ -70,8 +67,8 @@ function AuthProvider({children}) {
         
     );
 }
-// export const useAuth = () => {
-//     return useContext(AuthContext);
-//   };
+export const useAuth = () => {
+    return useContext(AuthContext);
+  };
 
 export default AuthProvider;
