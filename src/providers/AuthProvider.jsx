@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import auth from '../../src/firebase/firebase.config';
+import axios from 'axios';
 
 const googleProvider = new GoogleAuthProvider();
 export const AuthContext = createContext(null);
@@ -42,6 +43,19 @@ function AuthProvider({children}) {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setLoading(false);
+            // save current user in db
+            if(currentUser) {
+                try {
+                    axios.post(`${import.meta.env.VITE_API_URL}/users/${currentUser?.email}`,{
+                        name: currentUser?.displayName,
+                        email: currentUser?.email,
+                        image: currentUser?.photoURL
+                    })
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            
         });
 
         return () => unsubscribe(); // Cleanup subscription on unmount

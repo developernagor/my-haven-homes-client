@@ -11,6 +11,13 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
 import ErrorPage from "../components/ErrorPage/ErrorPage";
 
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query'
+const queryClient = new QueryClient()
+
 
   const router = createBrowserRouter([
     {
