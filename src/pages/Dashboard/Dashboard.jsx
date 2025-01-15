@@ -1,9 +1,10 @@
 import React from 'react';
+import AgentDashboard from './AgentDashboard/AgentDashboard';
 
 function Dashboard() {
     return (
         <div>
-            Dashboard
+            <AgentDashboard></AgentDashboard>
         </div>
     );
 }

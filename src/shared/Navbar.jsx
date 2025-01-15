@@ -1,20 +1,20 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/favicon.png'
 import { AuthContext } from '../providers/AuthProvider';
 
 function Navbar() {
 
     const links = <>
-    <Link to="/" className={({ isActive }) =>
+    <NavLink to="/" className={({ isActive }) =>
           isActive ? "bg-gray-200 px-3 py-1 rounded-lg" : "px-3 py-1"
-        }><li className=''>Home</li></Link>
-    <Link to="/all-properties" className={({ isActive }) =>
+        }><li className=''>Home</li></NavLink>
+    <NavLink to="/all-properties" className={({ isActive }) =>
           isActive ? "bg-gray-200 px-3 py-1 rounded-lg" : "px-3 py-1"
-        }><li className=''>All Properties</li></Link>
-    <Link to="/dashboard" className={({ isActive }) =>
+        }><li className=''>All Properties</li></NavLink>
+    <NavLink to="/dashboard" className={({ isActive }) =>
           isActive ? "bg-gray-200 px-3 py-1 rounded-lg" : "px-3 py-1"
-        }><li className=''>Dashboard</li></Link>
+        }><li className=''>Dashboard</li></NavLink>
     </>
 
     const {user, signOutUser} = useContext(AuthContext);

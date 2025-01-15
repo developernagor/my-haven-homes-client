@@ -10,6 +10,11 @@ import Register from "../components/Register/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
 import ErrorPage from "../components/ErrorPage/ErrorPage";
+import AddProperty from "../pages/Dashboard/AgentDashboard/AddProperty"
+import AgentProfile from '../pages/Dashboard/AgentDashboard/AgentProfile'
+import MyAddedProperties from '../pages/Dashboard/AgentDashboard/MyAddedProperties'
+import MySoldProperties from '../pages/Dashboard/AgentDashboard/MySoldProperties'
+import RequestedProperties from '../pages/Dashboard/AgentDashboard/RequestedProperties'
 
 import {
   QueryClient,
@@ -47,7 +52,31 @@ const queryClient = new QueryClient()
           path: '/dashboard',
           element: <PrivateRoute>
             <Dashboard></Dashboard>
-          </PrivateRoute>
+          </PrivateRoute>,
+          children: [
+            {
+              path: 'agent-profile',
+              element: <AgentProfile></AgentProfile>,
+              index:true,
+            }
+            ,
+            {
+              path: 'add-property',
+              element: <AddProperty></AddProperty>
+            },
+            {
+              path: 'my-added-properties',
+              element: <MyAddedProperties></MyAddedProperties>
+            },
+            {
+              path: 'my-sold-properties',
+              element: <MySoldProperties></MySoldProperties>
+            },
+            {
+              path: 'requested-properties',
+              element: <RequestedProperties></RequestedProperties>
+            }
+          ]
         }
       ]
     },
