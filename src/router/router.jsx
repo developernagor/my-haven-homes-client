@@ -15,7 +15,10 @@ import AgentProfile from '../pages/Dashboard/AgentDashboard/AgentProfile'
 import MyAddedProperties from '../pages/Dashboard/AgentDashboard/MyAddedProperties'
 import MySoldProperties from '../pages/Dashboard/AgentDashboard/MySoldProperties'
 import RequestedProperties from '../pages/Dashboard/AgentDashboard/RequestedProperties'
-
+import MyProfile from '../pages/Dashboard/UserDashboard/MyProfile'
+import Wishlist from '../pages/Dashboard/UserDashboard/Wishlist'
+import PropertyBought from '../pages/Dashboard/UserDashboard/PropertyBought'
+import MyReviews from '../pages/Dashboard/UserDashboard/MyReviews'
 import {
   QueryClient,
   QueryClientProvider,
@@ -54,6 +57,7 @@ const queryClient = new QueryClient()
             <Dashboard></Dashboard>
           </PrivateRoute>,
           children: [
+            // Agent Routes
             {
               path: 'agent-profile',
               element: <AgentProfile></AgentProfile>,
@@ -75,7 +79,24 @@ const queryClient = new QueryClient()
             {
               path: 'requested-properties',
               element: <RequestedProperties></RequestedProperties>
-            }
+            },
+            // User Routes
+            {
+              path: 'my-profile',
+              element: <MyProfile></MyProfile>
+            },
+            {
+              path: 'wishlist',
+              element: <Wishlist></Wishlist>
+            },
+            {
+              path: 'property-bought',
+              element: <PropertyBought></PropertyBought>
+            },
+            {
+              path: 'my-reviews',
+              element: <MyReviews></MyReviews>
+            },
           ]
         }
       ]
