@@ -1,14 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthProvider';
+import axios from 'axios';
 
+const image_hosting_key=import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api=`https://api.imgbb.com/1/upload?key=${image_hosting_key}`
 function AddProperty() {
     const { user } = useContext(AuthContext); // Access logged-in user info
+    const [error, setError] = useState('')
     const [propertyData, setPropertyData] = useState({
         title: '',
         location: '',
         image: null,
-        minimumPrice: '',
-        maximumPrice: '',
+        minimumPrice:parseInt(''),
+        maximumPrice:parseInt(''),
         
     });
 
@@ -16,7 +20,7 @@ function AddProperty() {
         const { name, value } = e.target;
         setPropertyData({
             ...propertyData,
-            [name]: value
+            [name]: name === 'minimumPrice' || name === 'maximumPrice' ? Number(value) : value
         });
     };
 
@@ -27,20 +31,50 @@ function AddProperty() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
+
+        // Validation
+        if(propertyData.minimumPrice < 0) {
+            setError("price must be only positive numbers")
+            return;
+          }
+          if(propertyData.maximumPrice < propertyData.minimumPrice || propertyData.maximumPrice == propertyData.minimumPrice)  {
+            setError("Maximum price must be greater than minimum price")
+            return;
+          }
+
+          // Image upload
+    const formData = new FormData();
+    formData.append('image', propertyData.image);
+    
+    try {
+        const res = await axios.post(image_hosting_api, formData);
+        const imageUrl = res.data.data.url;
+
+        const finalPropertyData = {
+            ...propertyData,
+            image: imageUrl,
+            agentName: user.displayName,
+            agentEmail: user.email,
+            agentImage: user.photoURL,
+        };
+
+
         // Handle form submission, sending data to the backend.
-        fetch('http://localhost:5000/properties', {
+        const response = await fetch('http://localhost:5000/properties', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify(propertyData)
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-        })
+            body: JSON.stringify(finalPropertyData)
+        });
+        const result = await response.json();
+        console.log(result);
+
+    } catch (error) {
+        console.error("Error uploading image or submitting form:", error);
+    }
         console.log(propertyData);
     };
 
@@ -110,9 +144,9 @@ function AddProperty() {
 
                 {/* Minimum Price */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Price Range</label>
+                    <label className="block text-sm font-medium text-gray-700">Minimum Price</label>
                     <input
-                        type="text"
+                        type="number"
                         name="minimumPrice"
                         value={propertyData.minimumPrice}
                         onChange={handleInputChange}
@@ -122,14 +156,15 @@ function AddProperty() {
                 </div>
                 {/* Maximum Price */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Price Range</label>
+                    <label className="block text-sm font-medium text-gray-700">Maximum Price</label>
                     <input
-                        type="text"
+                        type="number"
                         name="maximumPrice"
                         value={propertyData.maximumPrice}
                         onChange={handleInputChange}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+
                     />
                 </div>
 
@@ -143,6 +178,9 @@ function AddProperty() {
                     </button>
                 </div>
             </form>
+            {
+                error && <p className=' text-red-500 my-2'>{error}</p>
+            }
         </div>
     );
 }
