@@ -24,6 +24,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from '@tanstack/react-query'
+import PropertyDetails from "../pages/PropertyDetails/PropertyDetails";
 const queryClient = new QueryClient()
 
 
@@ -42,6 +43,10 @@ const queryClient = new QueryClient()
           element: <PrivateRoute>
             <AllProperties></AllProperties>
           </PrivateRoute>
+        },
+        {
+          path: '/properties/:id',
+          element: <PropertyDetails></PropertyDetails>
         },
         {
           path: '/login',

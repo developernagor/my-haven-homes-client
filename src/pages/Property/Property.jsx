@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Property({property}) {
     console.log(property)
     const {
-        agentEmail, agentName, image, location, maximumPrice, minimumPrice,title
+        _id,agentEmail, agentName, image, location, maximumPrice, minimumPrice,title
     } = property;
     return (
         <div className='border p-2 rounded-lg'>
@@ -14,7 +15,7 @@ function Property({property}) {
             
             <h2>Price Range: $ {minimumPrice} - $ {maximumPrice}</h2>
             
-            <button className='btn'>Details</button>
+            <Link to={`/properties/${_id}`}><button className='btn'>Details</button></Link>
         </div>
     );
 }
