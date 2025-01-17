@@ -20,6 +20,13 @@ function AddReviewModal({ propertyId, onClose }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Basic validation
+        if (!reviewData.reviewerName || !reviewData.comment || !reviewData.rating) {
+            setError("All fields are required.");
+            return;
+        }
+
         setIsSubmitting(true);
         setError(null);
 
@@ -72,11 +79,9 @@ function AddReviewModal({ propertyId, onClose }) {
                             className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm"
                             required
                         >
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                            {[1, 2, 3, 4, 5].map(value => (
+                                <option key={value} value={value}>{value}</option>
+                            ))}
                         </select>
                     </div>
 

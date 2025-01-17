@@ -12,6 +12,7 @@ function AddProperty() {
     title: "",
     location: "",
     image: null,
+    description:"",
     minimumPrice: parseInt(""),
     maximumPrice: parseInt(""),
   });
@@ -137,34 +138,24 @@ function AddProperty() {
           />
         </div>
 
-        {/* Agent Name */}
+        {/* Property Description */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Agent Name
+            Property Description
           </label>
           <input
             type="text"
-            value={user.displayName}
-            readOnly
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none bg-gray-100"
+            name="description"
+            value={propertyData.description}
+            onChange={handleInputChange}
+            required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
 
-        {/* Agent Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Agent Email
-          </label>
-          <input
-            type="email"
-            value={user.email}
-            readOnly
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none bg-gray-100"
-          />
-        </div>
-
-        {/* Minimum Price */}
-        <div>
+        <div className="flex gap-2">
+          {/* Minimum Price */}
+        <div className="w-1/2">
           <label className="block text-sm font-medium text-gray-700">
             Minimum Price
           </label>
@@ -178,7 +169,7 @@ function AddProperty() {
           />
         </div>
         {/* Maximum Price */}
-        <div>
+        <div className="w-1/2">
           <label className="block text-sm font-medium text-gray-700">
             Maximum Price
           </label>
@@ -191,6 +182,38 @@ function AddProperty() {
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
+        </div>
+        
+    {/* Agent Input */}
+        <div className="flex">
+          {/* Agent Name */}
+        <div className="w-1/2">
+          <label className="block text-sm font-medium text-gray-700">
+            Agent Name
+          </label>
+          <input
+            type="text"
+            value={user.displayName}
+            readOnly
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none bg-gray-100"
+          />
+        </div>
+
+        {/* Agent Email */}
+        <div className="w-1/2">
+          <label className="block text-sm font-medium text-gray-700">
+            Agent Email
+          </label>
+          <input
+            type="email"
+            value={user.email}
+            readOnly
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none bg-gray-100"
+          />
+        </div>
+        </div>
+
+        
 
         {/* Submit Button */}
         <div className="flex justify-center">

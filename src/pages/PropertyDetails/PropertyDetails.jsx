@@ -66,7 +66,11 @@ function PropertyDetails() {
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-            <h1 className="text-3xl font-bold">{title}</h1>
+            <h1 className='text-4xl font-bold py-4'>Property Details</h1>
+            <div className='py-4'>
+                <img src={image} alt="" />
+            </div>
+            <h1 className="text-2xl font-bold">{title}</h1>
             <p>Description: {description}</p>
             <p>Price Range: ${minimumPrice} - ${maximumPrice}</p>
             <p>Agent: {agentName}</p>

@@ -26,23 +26,25 @@ function ReviewList({ propertyId }) {
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return <p className="text-red-500">{error}</p>;
     }
 
     if (reviews.length === 0) {
-        return <p>No reviews yet.</p>;
+        return <p>No reviews yet. Be the first to add one!</p>;
     }
 
     return (
         <div className="mt-6">
-            <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+            <h2 className="text-2xl font-bold mb-4">All Reviews</h2>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
             {reviews.map(review => (
                 <div key={review._id} className="mb-4 p-4 bg-gray-100 rounded-lg">
                     <p><strong>{review.reviewerName}</strong> says:</p>
-                    <p>{review.comment}</p>
+                    <p>"{review.comment}"</p>
                     <p className="text-sm text-gray-500">Rating: {review.rating}/5</p>
                 </div>
             ))}
+            </div>
         </div>
     );
 }
