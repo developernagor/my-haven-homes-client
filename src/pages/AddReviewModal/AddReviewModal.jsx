@@ -5,8 +5,10 @@ function AddReviewModal({ propertyId, onClose }) {
     const [reviewData, setReviewData] = useState({
         reviewerName: '',
         rating: 1,
-        comment: ''
+        comment: '',
+        
     });
+    console.log(reviewData)
     const [error, setError] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,7 +37,8 @@ function AddReviewModal({ propertyId, onClose }) {
             propertyId,
             reviewerName: reviewData.reviewerName,
             rating: reviewData.rating,
-            comment: reviewData.comment
+            comment: reviewData.comment,
+            reviewTime: new Date()
         };
 
         try {
