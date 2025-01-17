@@ -25,6 +25,8 @@ import {
   useQuery,
 } from '@tanstack/react-query'
 import PropertyDetails from "../pages/PropertyDetails/PropertyDetails";
+import DashboardLayout from "../layout/DashboardLayout/DashboardLayout";
+import UpdateProperty from "../pages/Dashboard/AgentDashboard/UpdateProperty";
 const queryClient = new QueryClient()
 
 
@@ -65,8 +67,7 @@ const queryClient = new QueryClient()
             // Agent Routes
             {
               path: 'agent-profile',
-              element: <AgentProfile></AgentProfile>,
-              index:true,
+              element: <AgentProfile></AgentProfile>,  
             }
             ,
             {
@@ -76,6 +77,10 @@ const queryClient = new QueryClient()
             {
               path: 'my-added-properties',
               element: <MyAddedProperties></MyAddedProperties>
+            },
+            {
+              path: 'update-property/:id',
+              element:<UpdateProperty></UpdateProperty>
             },
             {
               path: 'my-sold-properties',
