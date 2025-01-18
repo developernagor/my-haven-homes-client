@@ -6,15 +6,14 @@ import MyProperty from './MyProperty';
 function MyAddedProperties() {
     const {user} = useContext(AuthContext)
     console.log(user)
-    const [myProperties, setMyProperties] = useState([])
-    const {isPending, data} = useQuery({
+    const {isPending, data:myProperties} = useQuery({
         queryKey: ['myProperties'],
         queryFn: async()=> {
             const res = await fetch(`http://localhost:5000/properties/${user?.email}`);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
-            setMyProperties(data)
+            
             return res.json();
         }
     });

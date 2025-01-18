@@ -1,56 +1,83 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthProvider';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 function UpdateProperty() {
 
     const {user} = useContext(AuthContext)
     const { id } = useParams();
-    const [formData, setFormData] = useState({
-        title: '',
-        location: '',
-        agentName: '',
-        status: '',
-        minimumPrice: '',
-        maximumPrice: '',
-    });
+    const [title, setTitle] = useState("")
+    const [location, setLocation] = useState("")
+    const [description, setDescription] = useState()
+    const [minimumPrice, setMinimumPrice] = useState("")
+    const [maximumPrice, setMaximumPrice] = useState("")
 
-    const { isLoading, data: property, refetch } = useQuery({
+    const [error, setError] = useState(null)
+    const navigate = useNavigate()
+    
+    // const [formData, setFormData] = useState({
+    //     title: '',
+    //     location: '',
+    //     agentName: '',
+    //     status: '',
+    //     minimumPrice: '',
+    //     maximumPrice: '',
+    // });
+
+    const { isLoading, data } = useQuery({
         queryKey: ['property', id],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/update-property/${id}`);
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
+            try {
+                const res = await fetch(`http://localhost:5000/update-property/${id}`);
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            } catch (error) {
+                setError(error.message);
+                throw error;
             }
-            return res.json();
-        },
-        onSuccess: (data) => {
-            setFormData({
-                title: data.title,
-                location: data.location,
-                agentName: data.agentName,
-                status: data.status,
-                minimumPrice: data.minimumPrice,
-                maximumPrice: data.maximumPrice,
-            });
         },
     });
 
-    if (isLoading) {
-        return 'Loading...';
-    }
+    useEffect(() => {
+        if(data){
+            setTitle(data.title || "");
+            setLocation(data.location || "");
+            setDescription(data.description || "");
+            setMinimumPrice(data.minimumPrice || "");
+            setMaximumPrice(data.maximumPrice || "");
+            setTitle(data.title || "");
+        }
+    },[data]);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-    };
+    
+
+
+    // if (isLoading) {
+    //     return 'Loading...';
+    // }
+
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prevState) => ({
+    //         ...prevState,
+    //         [name]: value,
+    //     }));
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const updateProperty = {
+            title,
+      location,
+      description,
+      minimumPrice,
+      maximumPrice,
+
+        }
 
         try {
             const res = await fetch(`http://localhost:5000/dashboard/update-property/${id}`, {
@@ -58,12 +85,13 @@ function UpdateProperty() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(updateProperty),
             });
 
             if (res.ok) {
                 alert('Property updated successfully!');
-                refetch();
+                navigate('/dashboard/my-added-properties')
+                
             } else {
                 alert('Failed to update the property. Please try again.');
             }
@@ -72,12 +100,17 @@ function UpdateProperty() {
             alert('An error occurred. Please try again.');
         }
     }
+
+    if (isLoading) {
+        return <p>Loading......</p>; // Add spinner styling in your CSS
+      }
    
 
 
     return (
         <div className="px-4 py-10 bg-gray-100">
             <h2 className="text-3xl font-bold text-center mb-8">Update Property</h2>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
             <form onSubmit={handleSubmit} className="space-y-4">
         {/* Property Title */}
         <div>
@@ -87,8 +120,8 @@ function UpdateProperty() {
           <input
             type="text"
             name="title"
-            value={formData.title}
-            onChange={handleInputChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
@@ -102,8 +135,8 @@ function UpdateProperty() {
           <input
             type="text"
             name="location"
-            value={formData.location}
-            onChange={handleInputChange}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
@@ -117,8 +150,8 @@ function UpdateProperty() {
           <input
             type="text"
             name="description"
-            value={formData.description}
-            onChange={handleInputChange}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
@@ -133,8 +166,8 @@ function UpdateProperty() {
           <input
             type="number"
             name="minimumPrice"
-            value={formData.minimumPrice}
-            onChange={handleInputChange}
+            value={minimumPrice}
+            onChange={(e) => setMinimumPrice(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
@@ -147,8 +180,8 @@ function UpdateProperty() {
           <input
             type="number"
             name="maximumPrice"
-            value={formData.maximumPrice}
-            onChange={handleInputChange}
+            value={maximumPrice}
+            onChange={(e) => setMaximumPrice(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
