@@ -27,6 +27,10 @@ import {
 import PropertyDetails from "../pages/PropertyDetails/PropertyDetails";
 import DashboardLayout from "../layout/DashboardLayout/DashboardLayout";
 import UpdateProperty from "../pages/Dashboard/AgentDashboard/UpdateProperty";
+import AdminProfile from "../pages/Dashboard/AdminDashboard/AdminProfile";
+import ManageProperties from "../pages/Dashboard/AdminDashboard/ManageProperties";
+import ManageUsers from "../pages/Dashboard/AdminDashboard/ManageUsers";
+import ManageReviews from "../pages/Dashboard/AdminDashboard/ManageReviews";
 const queryClient = new QueryClient()
 
 
@@ -107,6 +111,22 @@ const queryClient = new QueryClient()
               path: 'my-reviews',
               element: <MyReviews></MyReviews>
             },
+            {
+              path: 'admin-profile',
+              element: <AdminProfile></AdminProfile>
+            },
+            {
+              path: 'manage-properties',
+              element: <ManageProperties></ManageProperties>
+            },
+            {
+              path: 'manage-users',
+              element: <ManageUsers></ManageUsers>
+            },
+            {
+              path: 'manage-reviews',
+              element: <ManageReviews></ManageReviews>
+            }
           ]
         }
       ]
