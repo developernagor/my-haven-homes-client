@@ -4,7 +4,7 @@ import React from 'react';
 import Swal from 'sweetalert2';
 
 function ManageUsers() {
-
+  
     const {isLoading, data: users, error, refetch} = useQuery({
         queryKey:['users'],
         queryFn: async()=> {
@@ -62,11 +62,57 @@ function ManageUsers() {
         console.error('Error making user agent:', error);
       });
     };
+    const handleMarkAsFraud = user => {
+      axios.patch(`http://localhost:5000/users/fraud/${user._id}`)
+      .then(res => {
+        console.log(res.data);
+        if (res.data.result.modifiedCount > 0) {
+          refetch();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `${user.name} is marked as fraud and properties are removed!`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error making user as fraud:', error);
+      });
+    };
 
     
 
     const handleDeleteUser = id => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this",
+        position: "top-end",
+        icon: "warning",
+        showCancelButton:true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor:"#d33",
+        showConfirmButton: true,
+        confirmButtonText:"Yes, delete it!",
+      }).then((result) => {
+        if(result.isConfirmed) {
+          axios.delete(`http://localhost:5000/users/${id}`)
+          .then(res => {
+            if(res.data.deletedCount > 0) {
+              refetch();
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Deleted",
+                text:"User has been deleted",
+                timer: 1500
+              });
 
+            }
+          })
+        }
+      })     
     }
     return (
         <div>
@@ -93,14 +139,31 @@ function ManageUsers() {
         <td>{user.name}</td>
         <td>{user.email}</td>
         <td className=''> {
+          user.role === 'fraud' ? (
+            <div className='text-center'>
+              <span className="text-red-500 text-xl font-semibold">Fraud</span>
+            </div>
+          ) :
           user.role === 'admin' ? <p className='text-center font-semibold text-2xl'>admin</p> : <button onClick={()=> handleMakeAdmin(user)} className='btn bg-green-500 text-white'>Make Admin</button>} </td>
         <td>
-           
-            {
-                user.role === 'agent' ? <button className='btn bg-blue-500 text-white'>Mark as Fraud</button> : <button onClick={() => handleMakeAgent(user)} className='btn bg-blue-500 text-white'>Make Agent</button>
-            }
+           {
+            user.role === 'fraud' ? (
+              <div className='text-center'>
+              <span className="text-red-500 text-xl font-semibold">Fraud</span>
+            </div>
+            ) : user.role === 'agent' ? (
+              <button onClick={() => handleMarkAsFraud(user)} className="btn bg-blue-500 text-white">
+      Mark as Fraud
+    </button>
+            ) : (
+              <button onClick={() => handleMakeAgent(user)} className="btn bg-blue-500 text-white">
+      Make Agent
+    </button>
+            )
+           }
+            
         </td>
-        <td className=''> <button className='btn bg-red-500 text-white'>Delete</button> </td>
+        <td className=''> <button onClick={() => handleDeleteUser(user._id)} className='btn bg-red-500 text-white'>Delete</button> </td>
       </tr>
         )
       }
