@@ -42,6 +42,7 @@ console.log(mostRecentReviews)
                 /> */}
                 <div>
                   <h3 className="text-xl font-semibold">{review.reviewerName}</h3>
+                  <img src={review.reviewerImage} alt="" />
                   <p className="text-gray-600 text-sm">{review.propertyTitle}</p>
                 </div>
               </div>

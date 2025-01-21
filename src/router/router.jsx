@@ -31,6 +31,8 @@ import AdminProfile from "../pages/Dashboard/AdminDashboard/AdminProfile";
 import ManageProperties from "../pages/Dashboard/AdminDashboard/ManageProperties";
 import ManageUsers from "../pages/Dashboard/AdminDashboard/ManageUsers";
 import ManageReviews from "../pages/Dashboard/AdminDashboard/ManageReviews";
+import AdvertiseProperty from "../pages/Dashboard/AdminDashboard/AdvertiseProperty";
+import MakeOffer from "../pages/Dashboard/UserDashboard/MakeOffer";
 const queryClient = new QueryClient()
 
 
@@ -126,6 +128,14 @@ const queryClient = new QueryClient()
             {
               path: 'manage-reviews',
               element: <ManageReviews></ManageReviews>
+            },
+            {
+              path: 'advertise-property',
+              element: <AdvertiseProperty></AdvertiseProperty>
+            },
+            {
+              path: 'make-offer',
+              element: <MakeOffer></MakeOffer>
             }
           ]
         }

@@ -34,13 +34,19 @@ function PropertyDetails() {
 
     const handleAddToWishlist = async() => {
         const wishlistData = {
-            userId: user.uid,
+            userId: user._id,
+            userEmail: user.email,
+            userName: user.displayName,
             propertyId: property._id,
             title: property.title,
+            propertyLocation: property.location,
             description: property.description,
+            propertyImage: property.image,
             priceRange: `${property.minimumPrice} - ${property.maximumPrice}`,
             agentName: property.agentName,
+            status: property.status
         };
+        console.log(wishlistData)
 
         // Save to wishlist in the database
         try {

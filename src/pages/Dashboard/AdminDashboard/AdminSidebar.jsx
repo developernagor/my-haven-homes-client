@@ -16,6 +16,9 @@ function AdminSidebar() {
             <NavLink to="/dashboard/manage-reviews" className={({ isActive }) =>
           isActive ? "bg-gray-500 text-white text-center px-3 py-1 rounded-lg" : "text-center px-3 py-1"
         }>Manage Reviews</NavLink>
+            <NavLink to="/dashboard/advertise-property" className={({ isActive }) =>
+          isActive ? "bg-gray-500 text-white text-center px-3 py-1 rounded-lg" : "text-center px-3 py-1"
+        }>Advertise Property</NavLink>
             
             
         </div>

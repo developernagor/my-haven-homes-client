@@ -4,7 +4,7 @@ const Banner = () => {
   return (
     <div className="relative bg-cover bg-center h-[500px]" style={{ backgroundImage: "url('https://i.ibb.co.com/tZmLk6S/4031.jpg')" }}>
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-      <div className="absolute top-40 left-60 z-10 text-white text-center px-4 md:px-8">
+      <div className="absolute top-40 left-60 z-5 text-white text-center px-4 md:px-8">
         <h1 className="text-4xl md:text-6xl font-bold mt-10">Find Your Dream Home</h1>
         <p className="mt-4 text-lg md:text-xl">Explore the best properties in your area.</p>
         <div className="mt-8 flex justify-center">

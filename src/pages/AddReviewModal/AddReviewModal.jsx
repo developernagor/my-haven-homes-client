@@ -4,6 +4,8 @@ import axios from 'axios';
 function AddReviewModal({ propertyId, onClose }) {
     const [reviewData, setReviewData] = useState({
         reviewerName: '',
+        reviewerEmail: '',
+        reviewerImage: '',
         rating: 1,
         comment: '',
         
@@ -24,7 +26,7 @@ function AddReviewModal({ propertyId, onClose }) {
         e.preventDefault();
 
         // Basic validation
-        if (!reviewData.reviewerName || !reviewData.comment || !reviewData.rating) {
+        if (!reviewData.reviewerName || !reviewData.reviewerEmail || !reviewData.reviewerImage || !reviewData.comment || !reviewData.rating) {
             setError("All fields are required.");
             return;
         }
@@ -36,10 +38,13 @@ function AddReviewModal({ propertyId, onClose }) {
         const review = {
             propertyId,
             reviewerName: reviewData.reviewerName,
+            reviewerEmail: reviewData.reviewerEmail,
+            reviewerImage: reviewData.reviewerImage,
             rating: reviewData.rating,
             comment: reviewData.comment,
             reviewTime: new Date()
         };
+        console.log(review)
 
         try {
             await axios.post(`${import.meta.env.VITE_API_URL}/reviews`, review);
@@ -66,6 +71,32 @@ function AddReviewModal({ propertyId, onClose }) {
                             id="reviewerName"
                             name="reviewerName"
                             value={reviewData.reviewerName}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm"
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="reviewerEmail" className="block text-sm font-medium text-gray-700">Your Email</label>
+                        <input
+                            type="email"
+                            id="reviewerEmail"
+                            name="reviewerEmail"
+                            value={reviewData.reviewerEmail}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm"
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="reviewerImage" className="block text-sm font-medium text-gray-700">Your Image URL</label>
+                        <input
+                            type="url"
+                            id="reviewerImage"
+                            name="reviewerImage"
+                            value={reviewData.reviewerImage}
                             onChange={handleChange}
                             className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm"
                             required

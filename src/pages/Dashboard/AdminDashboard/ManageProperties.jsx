@@ -1,111 +1,99 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 function ManageProperties() {
-    const queryClient = useQueryClient();
-    const { isLoading, data: properties, error } = useQuery({
-        queryKey: ['agentProperties'],
-        queryFn: async () => {
-            const res = await fetch('http://localhost:5000/properties');
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return res.json();
-        },
-    });
-
-    const verifyPropertyMutation = useMutation(
-        async (propertyId) => {
-            const res = await fetch(`http://localhost:5000/properties/${propertyId}/verify`, {
-                method: 'POST',
-            });
-            if (!res.ok) {
-                throw new Error('Failed to verify the property');
-            }
-            return res.json();
-        },
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(['agentProperties']);
-            },
-        }
-    );
-
-    const rejectPropertyMutation = useMutation(
-        async (propertyId) => {
-            const res = await fetch(`http://localhost:5000/properties/${propertyId}/reject`, {
-                method: 'POST',
-            });
-            if (!res.ok) {
-                throw new Error('Failed to reject the property');
-            }
-            return res.json();
-        },
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(['agentProperties']);
-            },
-        }
-    );
-
-    if (isLoading) {
-        return 'Loading...';
+  const [properties, setProperties] = useState([]);
+  
+  // Fetch properties initially from API
+  const fetchProperties = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/properties');
+      setProperties(response.data);
+    } catch (error) {
+      console.error('Error fetching properties:', error);
     }
+  };
 
-    if (error) {
-        return `Error: ${error.message}`;
+  const handleVerify = async (propertyId) => {
+    
+    try {
+      const response = await axios.patch(`http://localhost:5000/properties/verify/${propertyId}`, { status: 'verified' });
+      // Update the property status locally
+      setProperties(properties.map(property => 
+        property._id === propertyId ? { ...property, status: 'verified' } : property
+      ));
+    } catch (error) {
+      console.error('Error verifying property:', error);
     }
+  };
 
-    return (
-        <div>
-            <h2>Manage Properties</h2>
-            <table className="table-auto border-collapse border border-slate-400 w-full">
-                <thead>
-                    <tr>
-                        <th className="border border-slate-300 px-4 py-2">Title</th>
-                        <th className="border border-slate-300 px-4 py-2">Location</th>
-                        <th className="border border-slate-300 px-4 py-2">Agent Name</th>
-                        <th className="border border-slate-300 px-4 py-2">Agent Email</th>
-                        <th className="border border-slate-300 px-4 py-2">Price Range</th>
-                        <th className="border border-slate-300 px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {properties.map((property) => (
-                        <tr key={property._id}>
-                            <td className="border border-slate-300 px-4 py-2">{property.title}</td>
-                            <td className="border border-slate-300 px-4 py-2">{property.location}</td>
-                            <td className="border border-slate-300 px-4 py-2">{property.agentName}</td>
-                            <td className="border border-slate-300 px-4 py-2">{property.agentEmail}</td>
-                            <td className="border border-slate-300 px-4 py-2">${property.minimumPrice} - ${property.maximumPrice}</td>
-                            <td className="border border-slate-300 px-4 py-2">
-                                {property.status === 'verified' ? (
-                                    'Verified'
-                                ) : property.status === 'rejected' ? (
-                                    'Rejected'
-                                ) : (
-                                    <>
-                                        <button
-                                            onClick={() => verifyPropertyMutation.mutate(property._id)}
-                                            className="btn btn-success mr-2"
-                                        >
-                                            Verify
-                                        </button>
-                                        <button
-                                            onClick={() => rejectPropertyMutation.mutate(property._id)}
-                                            className="btn btn-danger"
-                                        >
-                                            Reject
-                                        </button>
-                                    </>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
+  const handleReject = async (propertyId) => {
+    try {
+      const response = await axios.patch(`http://localhost:5000/properties/reject/${propertyId}`, { status: 'rejected' });
+      // Update the property status locally
+      setProperties(properties.map(property => 
+        property._id === propertyId ? { ...property, status: 'rejected' } : property
+      ));
+    } catch (error) {
+      console.error('Error rejecting property:', error);
+    }
+  };
+
+  // Call the fetch function when the component mounts
+  React.useEffect(() => {
+    fetchProperties();
+  }, []);
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full border-collapse">
+        <thead>
+          <tr>
+            <th className="border p-2">Property Title</th>
+            <th className="border p-2">Location</th>
+            <th className="border p-2">Agent Name</th>
+            <th className="border p-2">Agent Email</th>
+            <th className="border p-2">Price Range</th>
+            <th className="border p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {properties.map((property) => (
+            
+            <tr key={property._id}>
+              <td className="border p-2">{property.title}</td>
+              <td className="border p-2">{property.location}</td>
+              <td className="border p-2">{property.agentName}</td>
+              <td className="border p-2">{property.agentEmail}</td>
+              <td className="border p-2">{property.priceRange}</td>
+              <td className="border p-2">
+                {property.status === 'verified' ? (
+                  <span className="text-green-500">Verified</span>
+                ) : property.status === 'rejected' ? (
+                  <span className="text-red-500">Rejected</span>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleVerify(property._id)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md mr-2"
+                    >
+                      Verify
+                    </button>
+                    <button
+                      onClick={() => handleReject(property._id)}
+                      className="px-4 py-2 bg-red-500 text-white rounded-md"
+                    >
+                      Reject
+                    </button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export default ManageProperties;

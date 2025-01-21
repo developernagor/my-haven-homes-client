@@ -46,7 +46,9 @@ function AllProperties() {
     return (
         <div>
             <div className="flex items-center justify-between text-end mb-4">
-            <div>All Properties: {sortedProperties.length}</div>
+            <div>
+            All Verified Properties: {sortedProperties.filter((property) => property.status === 'verified').length}
+            </div>
 
                 <div>
                 <input
@@ -68,7 +70,7 @@ function AllProperties() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedProperties.map((property) => (
+                {sortedProperties.filter((property) => property.status === 'verified').map((property) => (
                     <Property key={property._id} property={property} />
                 ))}
             </div>
