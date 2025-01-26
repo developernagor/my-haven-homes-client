@@ -10,7 +10,7 @@ const Advertisement = () => {
   const {isLoading, isPending, data:advertisements} = useQuery({
     queryKey:['advertisements'],
     queryFn: async() => {
-      const res = await fetch('http://localhost:5000/advertisements');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/advertisements`);
             console.log(res)
             if (!res.ok) {
                 throw new Error('Network response was not ok');
@@ -39,14 +39,16 @@ const latestAdvertisements = [...advertisements]
             <img src={property.image} alt="Property" className="w-full h-48 object-cover" />
             <div className="p-4">
               <h3 className="text-xl font-semibold">{property.location}</h3>
-              <p className="text-gray-600 mt-2">{property.minimumPrice} - {property.maximumPrice}</p>
-              <p className="text-sm mt-2">
+              <p className="text-gray-600 mt-2">$ {property.minimumPrice} - $ {property.maximumPrice}</p>
+              <p className="text-sm my-2">
                 Verification Status: 
                 <span className={`ml-1 font-semibold ${property.status === 'verified' ? 'text-green-500' : 'text-red-500'}`}>
                   {property.status === 'verified' ? 'Verified' : 'Unverified'}
                 </span>
               </p>
-              <Link to={`/properties/${property._id}`}><button className='btn'>Details</button></Link>
+              <Link to={`/properties/${property._id}`}><button 
+              className="border rounded-lg px-4 py-1 bg-purple-600 text-white font-semibold"
+              >Details</button></Link>
             </div>
           </div>
         ))}

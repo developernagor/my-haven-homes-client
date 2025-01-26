@@ -36,7 +36,7 @@ const ContactForm = () => {
     setSuccess(false);
 
     try {
-        const response = await fetch("http://localhost:5000/user-message", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/user-message`, {
           method: "POST",
           headers: {
             "content-type": "application/json",

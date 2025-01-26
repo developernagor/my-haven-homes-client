@@ -8,7 +8,7 @@ function AdvertiseProperty() {
     const {isLoading, data: properties, error} = useQuery({
         queryKey:['properties'],
         queryFn: async() => {
-            const res = await fetch('http://localhost:5000/admin/properties/verified');
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/properties/verified`);
             console.log(res)
             if (!res.ok) {
                 throw new Error('Network response was not ok');
@@ -41,7 +41,7 @@ function AdvertiseProperty() {
 
         // Save to wishlist in the database
         try {
-            await axios.post('http://localhost:5000/advertisements', property);
+            await axios.post(`${import.meta.env.VITE_API_URL}/advertisements`, property);
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -76,7 +76,9 @@ function AdvertiseProperty() {
                             <td>{property.priceRange}</td>
                             <td>{property.agentName}</td>
                             <td>
-                                <button onClick={() => handleAddAdvertise(property)} className='btn'>Advertise</button>
+                                <button onClick={() => handleAddAdvertise(property)} 
+                                className="border rounded-lg px-4 py-1 bg-purple-600 text-white font-semibold"
+                                    >Advertise</button>
                             </td>
                         </tr>
                     ))}

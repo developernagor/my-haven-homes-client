@@ -7,17 +7,31 @@ function Property({property}) {
         _id,agentEmail,agentImage, agentName, image, location,status, maximumPrice, minimumPrice,title
     } = property;
     return (
-        <div className='border p-2 rounded-lg'>
-            <img src={image} alt="" />
-            <h2>{title}</h2>
-            <h2>{location}</h2>
-            <h2>Agent Name: {agentName}</h2>
-            <img src={agentImage} alt="" />
+        <div className='border p-2 rounded-lg '>
+           <img src={image} alt={`Property image of ${title}`} />
+
+            <h2 className='text-xl'>{title}</h2>
+            <h2 className='text-xl'>{location}</h2>
+            <h2 className='text-xl'>Status: {status}</h2>
+            <h2 className='text-xl'>Price Range: $ {minimumPrice} - $ {maximumPrice}</h2>
             
-            <h2>Status: {status}</h2>
-            <h2>Price Range: $ {minimumPrice} - $ {maximumPrice}</h2>
+            <div className='flex items-center gap-4 my-3'>
+            <img src={agentImage || 'default-image-url.jpg'} alt={`Agent ${agentName}`} className='rounded-lg'/>
+
+            <div>
+                <h2 className='font-semibold text-xl mb-1'>Agent Info:</h2>
+            <h2> {agentName}</h2>
+            <h2> {agentEmail}</h2>
+            </div>
+            </div>
             
-            <Link to={`/properties/${_id}`}><button className='btn'>Details</button></Link>
+            
+            
+            <div>
+            <Link to={`/properties/${_id}`}><button 
+            className="w-[50%] mx-auto border rounded-lg px-4 py-1 bg-purple-600 text-white font-semibold"
+            >Details</button></Link>
+            </div>
         </div>
     );
 }

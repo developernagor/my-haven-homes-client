@@ -29,7 +29,7 @@ function UpdateProperty() {
         queryKey: ['property', id],
         queryFn: async () => {
             try {
-                const res = await fetch(`http://localhost:5000/update-property/${id}`);
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/update-property/${id}`);
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -80,7 +80,7 @@ function UpdateProperty() {
         }
 
         try {
-            const res = await fetch(`http://localhost:5000/dashboard/update-property/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/dashboard/update-property/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

@@ -12,7 +12,7 @@ function RequestedProperties() {
   } = useQuery({
     queryKey: ["offers"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/offers");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/offers`);
       console.log(res);
       if (!res.ok) {
         throw new Error("Network response was not ok");
@@ -30,7 +30,7 @@ function RequestedProperties() {
 
   const handleAcceptOffer = async(id) => {
     console.log(id)
-    axios.patch(`http://localhost:5000/offers-accepted/${id}`)
+    axios.patch(`${import.meta.env.VITE_API_URL}/offers-accepted/${id}`)
       .then(res => {
         console.log(res.data);
         if (res.data.modifiedCount > 0) {
@@ -50,7 +50,7 @@ function RequestedProperties() {
   }
   const handleRejectOffer = async(id) => {
     console.log(id)
-    axios.patch(`http://localhost:5000/offers-rejected/${id}`)
+    axios.patch(`${import.meta.env.VITE_API_URL}/offers-rejected/${id}`)
       .then(res => {
         console.log(res.data);
         if (res.data.modifiedCount > 0) {

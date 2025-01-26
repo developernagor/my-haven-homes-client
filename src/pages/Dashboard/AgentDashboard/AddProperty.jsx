@@ -71,7 +71,7 @@ function AddProperty() {
       };
 
       // Handle form submission, sending data to the backend.
-      const response = await fetch("http://localhost:5000/properties", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/properties`, {
         method: "POST",
         headers: {
           "content-type": "application/json",

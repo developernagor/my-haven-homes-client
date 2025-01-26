@@ -4,12 +4,11 @@ import { AuthContext } from '../../providers/AuthProvider';
 import axios from 'axios';
 import ReviewList from '../ReviewList/ReviewList';
 import AddReviewModal from '../AddReviewModal/AddReviewModal';
-// import AddReviewModal from './AddReviewModal';
-// import ReviewsList from './ReviewsList';
+
 
 function PropertyDetails() {
     const { id } = useParams();
-    console.log(id)
+    // console.log(id)
     const { user } = useContext(AuthContext);
     const [property, setProperty] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -42,8 +41,11 @@ function PropertyDetails() {
             propertyLocation: property.location,
             description: property.description,
             propertyImage: property.image,
-            priceRange: `${property.minimumPrice} - ${property.maximumPrice}`,
+            minimumPrice: property.minimumPrice,
+            maximumPrice: property.maximumPrice,
+            
             agentName: property.agentName,
+            agentImage: property.agentImage,
             status: property.status
         };
         console.log(wishlistData)
@@ -92,8 +94,10 @@ function PropertyDetails() {
             
 
             <ReviewList propertyId={id} />
+
+
             <button onClick={() => setShowModal(true)} className="mt-4 px-6 py-2 bg-green-600 text-white rounded-md shadow-sm hover:bg-green-700">Add a Review</button>
-            {showModal && <AddReviewModal propertyId={id} onClose={() => setShowModal(false)} />}
+            {showModal && <AddReviewModal property={property} propertyId={id} onClose={() => setShowModal(false)} />}
         </div>
     );
 }

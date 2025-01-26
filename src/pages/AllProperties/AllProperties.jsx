@@ -12,7 +12,7 @@ function AllProperties() {
     const {isLoading, data:properties, error} = useQuery({
         queryKey: ['properties'],
         queryFn: async()=> {
-            const res = await fetch('http://localhost:5000/properties');
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/properties`);
             console.log(res)
             if (!res.ok) {
                 throw new Error('Network response was not ok');

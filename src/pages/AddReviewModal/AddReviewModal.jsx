@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function AddReviewModal({ propertyId, onClose }) {
+function AddReviewModal({property, propertyId, onClose }) {
     const [reviewData, setReviewData] = useState({
         reviewerName: '',
         reviewerEmail: '',
         reviewerImage: '',
         rating: 1,
         comment: '',
+        propertyTitle: property.title,
+        agentName: property.agentName,
         
     });
     console.log(reviewData)
+    console.log(property)
     const [error, setError] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -42,7 +45,9 @@ function AddReviewModal({ propertyId, onClose }) {
             reviewerImage: reviewData.reviewerImage,
             rating: reviewData.rating,
             comment: reviewData.comment,
-            reviewTime: new Date()
+            reviewTime: new Date(),
+            agentName: reviewData.agentName,
+            propertyTitle: reviewData.propertyTitle
         };
         console.log(review)
 

@@ -9,7 +9,7 @@ function MyAddedProperties() {
     const {isPending, data:myProperties} = useQuery({
         queryKey: ['myProperties'],
         queryFn: async()=> {
-            const res = await fetch(`http://localhost:5000/properties/${user?.email}`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${user?.email}`);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -28,7 +28,7 @@ function MyAddedProperties() {
     const handleDelete = async (propertyId) => {
         if (window.confirm("Are you sure you want to delete this property?")) {
           try {
-            const response = await fetch(`http://localhost:5000/properties/${propertyId}`, { method: "DELETE" });
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/properties/${propertyId}`, { method: "DELETE" });
             if (!response.ok) {
               throw new Error("Failed to delete the property");
             }

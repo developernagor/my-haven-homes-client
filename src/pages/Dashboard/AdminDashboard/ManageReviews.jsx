@@ -8,7 +8,7 @@ function ManageReviews() {
     const {isLoading, data:reviews, refetch, error} = useQuery({
         queryKey: ['reviews'],
         queryFn: async() => {
-            const res = await fetch('http://localhost:5000/reviews');
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/reviews`);
             console.log(res)
             if (!res.ok) {
                 throw new Error('Network response was not ok');
@@ -36,7 +36,7 @@ function ManageReviews() {
           confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
           if (result.isConfirmed) {
-            axios.delete(`http://localhost:5000/reviews/${id}`)
+            axios.delete(`${import.meta.env.VITE_API_URL}/reviews/${id}`)
               .then((res) => {
                 if (res.data.deletedCount > 0) {
                   refetch();

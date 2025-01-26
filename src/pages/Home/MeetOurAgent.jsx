@@ -1,27 +1,25 @@
 import React from 'react';
+import {useQuery} from "@tanstack/react-query"
+import axios from 'axios';
 
 const MeetOurAgent = () => {
 
-    const agents = [
-        {
-          name: 'John Doe',
-          title: 'Senior Agent',
-          bio: 'John has over 10 years of experience in real estate and is dedicated to helping clients find their dream homes.',
-          email: 'johndoe@example.com',
-          phone: '123-456-7890',
-          // Uncomment if you have images
-          // image: 'path/to/image.jpg',
-        },
-        {
-          name: 'Jane Smith',
-          title: 'Junior Agent',
-          bio: 'Jane is passionate about real estate and specializes in luxury properties.',
-          email: 'janesmith@example.com',
-          phone: '987-654-3210',
-          image: 'path/to/image.jpg',
-        },
-        // Add more agents as needed
-      ];
+  const {isLoading, data: agents, error} = useQuery({
+    queryKey: ['agents'],
+    queryFn: async() => {
+      const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/users/agent`);
+      return data;
+    }
+  })
+  if(isLoading){
+    return 'loading......'
+}
+if (error) {
+    return `Error: ${error.message}`;
+}
+
+
+    
 
 
   return (
@@ -30,16 +28,16 @@ const MeetOurAgent = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {agents.map((agent, index) => (
           <div key={index} className="bg-gray-100 rounded-lg shadow-md overflow-hidden p-6">
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-4 gap-4">
               {/* Uncomment and use if you have images */}
-              <div className='w-1/2'>
+              <div className='w-1/3'>
               <img
                 src={agent.image}
                 alt={`${agent.name}`}
                 className="w-full h-16 rounded-full object-cover mr-4"
               />
               </div>
-              <div className='w-1/2 text-start'>
+              <div className='w-2/3 text-start'>
                 <h3 className="text-xl font-semibold">{agent.name}</h3>
                 <p className="text-gray-600 text-sm">{agent.title}</p>
             <p className="text-gray-700 mb-4">{agent.bio}</p>

@@ -8,7 +8,7 @@ function ManageUsers() {
     const {isLoading, data: users, error, refetch} = useQuery({
         queryKey:['users'],
         queryFn: async()=> {
-            const res = await fetch('http://localhost:5000/users');
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/users`);
             console.log(res)
             if (!res.ok) {
                 throw new Error('Network response was not ok');
@@ -22,10 +22,11 @@ function ManageUsers() {
     if (error) {
         return `Error: ${error.message}`;
     }
+    console.log(users)
 
 
     const handleMakeAdmin = user => {
-      axios.patch(`http://localhost:5000/users/admin/${user._id}`)
+      axios.patch(`${import.meta.env.VITE_API_URL}/users/admin/${user._id}`)
       .then(res => {
         console.log(res.data);
         if (res.data.modifiedCount > 0) {
@@ -44,7 +45,7 @@ function ManageUsers() {
       });
     };
     const handleMakeAgent = user => {
-      axios.patch(`http://localhost:5000/users/agent/${user._id}`)
+      axios.patch(`${import.meta.env.VITE_API_URL}/users/agent/${user._id}`)
       .then(res => {
         console.log(res.data);
         if (res.data.modifiedCount > 0) {
@@ -63,7 +64,7 @@ function ManageUsers() {
       });
     };
     const handleMarkAsFraud = user => {
-      axios.patch(`http://localhost:5000/users/fraud/${user._id}`)
+      axios.patch(`${import.meta.env.VITE_API_URL}/users/fraud/${user._id}`)
       .then(res => {
         console.log(res.data);
         if (res.data.result.modifiedCount > 0) {
@@ -82,6 +83,7 @@ function ManageUsers() {
       });
     };
 
+
     
 
     const handleDeleteUser = id => {
@@ -97,7 +99,7 @@ function ManageUsers() {
         confirmButtonText:"Yes, delete it!",
       }).then((result) => {
         if(result.isConfirmed) {
-          axios.delete(`http://localhost:5000/users/${id}`)
+          axios.delete(`${import.meta.env.VITE_API_URL}/users/${id}`)
           .then(res => {
             if(res.data.deletedCount > 0) {
               refetch();
@@ -134,7 +136,8 @@ function ManageUsers() {
       {/* row 1 */}
       {
         users.map((user,index)=>
-            <tr>
+          
+            <tr key={user._id}>
         <th>{index+1}</th>
         <td>{user.name}</td>
         <td>{user.email}</td>

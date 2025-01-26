@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import auth from '../../src/firebase/firebase.config';
 import axios from 'axios';
 
@@ -10,10 +10,11 @@ function AuthProvider({children}) {
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null)
 
     console.log(user)
 
-    const createUser = (email, password) => {
+    const createUser = (email,password) => {
         setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
     }
@@ -38,21 +39,25 @@ function AuthProvider({children}) {
     
 
     useEffect(() => {
-        const auth = getAuth();
+        // const auth = getAuth();
+        // console.log(auth)
 
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
+            console.log(currentUser)
+            
             setLoading(false);
             // save current user in db
             if(currentUser) {
                 try {
-                    axios.post(`${import.meta.env.VITE_API_URL}/users/${currentUser?.email}`,{
-                        name: currentUser?.displayName,
-                        email: currentUser?.email,
-                        image: currentUser?.photoURL
+                   await axios.post(`${import.meta.env.VITE_API_URL}/users/${currentUser?.email}`,{
+                        name: currentUser?.displayName || "Anonymous User",
+              email: currentUser?.email,
+              image: currentUser?.photoURL || "",
                     })
+                    console.log("User saved to database successfully.");
                 } catch (error) {
-                    console.error(error);
+                    console.error("Error saving user to database:", error.message);
                 }
             }
             
@@ -66,10 +71,12 @@ function AuthProvider({children}) {
     const authInfo = {
         user,
         loading,
+        error,
         createUser,
         signInUser,
         signInWithGoogle,
-        signOutUser
+        signOutUser,
+        updateProfile
     }
 
 

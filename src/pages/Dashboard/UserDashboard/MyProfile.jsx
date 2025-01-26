@@ -17,14 +17,16 @@ function MyProfile() {
        
     return (
         <div className="profile-container">
-            <h1 className='text-4xl font-bold py-8'>My Profile</h1>
-            <div className="profile-info">
+            <h1 className='text-3xl font-bold py-8 text-center'>Welcome to your profile!</h1>
+            <div className="profile-info flex items-center gap-8">
                 <img src={user.photoURL} alt={`${displayName}'s profile`} className="profile-image w-[400px] rounded-2xl mb-4 mx-auto" />
+                <div>
                 <h2 className='text-3xl'>Name: {displayName}</h2>
                 {user.role && user.role !== 'regular' && <p>Role: {user.role}</p>}
                 {/* Add more user information here if needed */}
                 <p className='text-2xl mb-2'>Email: {email}</p>
                 <p className='text-xl mb-2'>Joined: {joinedDate || 'No date available'}</p>
+                </div>
             </div>
         </div>
     );

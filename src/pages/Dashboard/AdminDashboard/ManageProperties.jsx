@@ -7,7 +7,7 @@ function ManageProperties() {
   // Fetch properties initially from API
   const fetchProperties = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/properties');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/properties`);
       setProperties(response.data);
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -17,7 +17,7 @@ function ManageProperties() {
   const handleVerify = async (propertyId) => {
     
     try {
-      const response = await axios.patch(`http://localhost:5000/properties/verify/${propertyId}`, { status: 'verified' });
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/properties/verify/${propertyId}`, { status: 'verified' });
       // Update the property status locally
       setProperties(properties.map(property => 
         property._id === propertyId ? { ...property, status: 'verified' } : property
@@ -29,7 +29,7 @@ function ManageProperties() {
 
   const handleReject = async (propertyId) => {
     try {
-      const response = await axios.patch(`http://localhost:5000/properties/reject/${propertyId}`, { status: 'rejected' });
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/properties/reject/${propertyId}`, { status: 'rejected' });
       // Update the property status locally
       setProperties(properties.map(property => 
         property._id === propertyId ? { ...property, status: 'rejected' } : property

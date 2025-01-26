@@ -1,129 +1,171 @@
-import Lottie from 'lottie-react';
-import React, { useContext, useState } from 'react';
-import registerLottieData from '../../assets/registration-lottie.json';
+import Lottie from "lottie-react";
+import React, { useContext, useState } from "react";
+import registerLottieData from "../../assets/registration-lottie.json";
 
-import { AuthContext } from '../../providers/AuthProvider';
-import { Link, useNavigate } from 'react-router-dom';
-import SocialLogin from '../SocialLogin/SocialLogin';
+import { AuthContext } from "../../providers/AuthProvider";
+import { Link, useNavigate } from "react-router-dom";
+import SocialLogin from "../SocialLogin/SocialLogin";
+import axios from "axios";
+import { updateProfile } from "firebase/auth";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const Register = () => {
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
-    const [error, setError] = useState("")
+  const { createUser } = useContext(AuthContext);
+  
 
-    const navigate = useNavigate();
-
-    const { createUser } = useContext(AuthContext);
-
-    const handleRegister = e => {
-        e.preventDefault();
-        setError("")
-        const form = e.target;
-
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+  
+    const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
-    const image = form.image.value;
+    const image = form.image.files[0];
     const password = form.password.value;
-    const user = {name, email, image, password}
-    console.log(user)
-        // password validation: 
-        if(password.length < 6) {
-            setError("Password should be at least 6 characters.")
-            return;
-          }
-        //   if(!/[a-z]/.test(password)){
-        //     setError("Password should be at least one lowercase letter.")
-        //     return;
-        //   }
-          if(!/[A-Z]/.test(password)){
-            setError("Password should be at least one uppercase letter.")
-            return;
-          }
-          if(!/[#?!@$%^&*-]/.test(password)){
-            setError("Password should be at least one special character.")
-            return;
-          }
-      
-        
-        createUser(email, password)
-            .then(result => {
-                console.log(result.user)
-                const newUser = {name,email,image}
-        //         // save new user info in database
-
-        //         fetch('https://easy-recommendations-server.vercel.app/users', {
-        //             method: 'POST',
-        //             headers: {
-        //               'Content-Type': 'application/json',
-        //             },
-        //             body: JSON.stringify(newUser),
-        //           })
-        //             .then((res) => res.json())
-        //             .then((data) => {
-        //               console.log(data);
-        //             })
-        //             .catch((error) => console.error('Error:', error));
-
-                form.reset();
-                navigate('/login')
-            })
-            .catch(error => {
-                console.log(error.message)
-            })
-
+  
+    // Password validation
+    if (password.length < 6) {
+      setError("Password should be at least 6 characters.");
+      return;
     }
+    if (!/[A-Z]/.test(password)) {
+      setError("Password should have at least one uppercase letter.");
+      return;
+    }
+    if (!/[#?!@$%^&*-]/.test(password)) {
+      setError("Password should have at least one special character.");
+      return;
+    }
+  
+    try {
+      // Image upload to imgbb
+      const imageFormData = new FormData();
+      imageFormData.append("image", image);
+  
+      const imgRes = await axios.post(image_hosting_api, imageFormData);
+      const photoURL = imgRes.data.data.url;
+  
+      // Create user with Firebase
+      const userCredential = await createUser(email, password);
+      const user = userCredential.user;
+      console.log(userCredential, user)
+  
+      // Update profile with displayName and photoURL
+      await updateProfile(user, {
+        displayName: name,
+        photoURL: photoURL,
+      });
+  
+      setSuccess("User registered successfully!");
+      console.log("User created:", { name, email, photoURL });
+  
+      // Reset form and navigate
+      form.reset();
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
+    }
+  };
 
-    return (
-        <div className="hero bg-base-200">
-            <div className="hero-content flex-col lg:flex-row-reverse">
-                <div className="text-center lg:text-left w-96">
-                    <Lottie animationData={registerLottieData}></Lottie>
-                </div>
-                <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-                    <h1 className="ml-8 text-3xl font-bold">Register now!</h1>
-                    <form onSubmit={handleRegister} className="card-body p-2">
-                    <div className="form-control">
+  return (
+    <div className="hero bg-base-200">
+      <div className="hero-content flex-col lg:flex-row-reverse">
+        <div className="text-center lg:text-left w-96">
+          <Lottie animationData={registerLottieData}></Lottie>
+        </div>
+        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+          <h1 className="ml-8 text-3xl font-bold">Register now!</h1>
+          <form onSubmit={handleRegister} className="card-body p-2">
+            <div className="form-control">
               <label className="label">
                 <span className="label-text">Name</span>
               </label>
-              <input type="text" placeholder="Name" name='name' className="input input-bordered" required />
+              <input
+                type="text"
+                placeholder="Name"
+                name="name"
+                className="input input-bordered"
+                required
+              />
             </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Email</span>
-                            </label>
-                            <input type="email" name='email' placeholder="email" className="input input-bordered" required />
-                        </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Email</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="email"
+                className="input input-bordered"
+                required
+              />
+            </div>
 
-                        <div className="form-control">
+            <div className="form-control">
               <label className="label">
                 <span className="label-text">PhotoURL</span>
               </label>
-              <input type="text" placeholder="Photo URL" name='image' className="input input-bordered" required />
+              <input
+                type="file"
+                accept="image/*"
+                name="image"
+                required
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />{" "}
             </div>
 
-
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Password</span>
-                            </label>
-                            <input type="password" name='password' placeholder="password" className="input input-bordered" required />
-                            <label className="label">
-                                <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-                            </label>
-                        </div>
-
-                        {error && <div className="alert alert-error mt-4"><span>{error}</span></div>}
-
-                        <div className="form-control">
-                            <button className="btn btn-primary">Register</button>
-                        </div>
-                    </form>
-                    <p>If you aleady have an account, please <Link to="/login" className='text-blue-600 '>Login</Link></p>
-                    <SocialLogin></SocialLogin>
-                </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Password</span>
+              </label>
+              <input
+                type="password"
+                name="password"
+                placeholder="password"
+                className="input input-bordered"
+                required
+              />
+              <label className="label">
+                <a href="#" className="label-text-alt link link-hover">
+                  Forgot password?
+                </a>
+              </label>
             </div>
+
+            {error && (
+            <p className="text-sm text-red-500">
+              <strong>Error:</strong> {error}
+            </p>
+          )}
+          {success && (
+            <p className="text-sm text-green-500">
+              <strong>Success:</strong> {success}
+            </p>
+          )}
+
+            <div className="form-control">
+              <button className="btn btn-primary">Register</button>
+            </div>
+          </form>
+          <p>
+            If you aleady have an account, please{" "}
+            <Link to="/login" className="text-blue-600 ">
+              Login
+            </Link>
+          </p>
+          <SocialLogin></SocialLogin>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Register;

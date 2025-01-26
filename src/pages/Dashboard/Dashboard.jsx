@@ -14,7 +14,7 @@ function Dashboard() {
     const {isPending, data: users} = useQuery({
         queryKey: ['users'],
         queryFn: async()=> {
-            const res = await fetch('http://localhost:5000/users');
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/users`);
 
             return res.json();
         }

@@ -12,9 +12,11 @@ function Navbar() {
     <NavLink to="/all-properties" className={({ isActive }) =>
           isActive ? "bg-gray-200 px-3 py-1 rounded-lg" : "px-3 py-1"
         }><li className=''>All Properties</li></NavLink>
+
     <NavLink to="/dashboard" className={({ isActive }) =>
           isActive ? "bg-gray-200 px-3 py-1 rounded-lg" : "px-3 py-1"
         }><li className=''>Dashboard</li></NavLink>
+        
     </>
 
     const {user, signOutUser} = useContext(AuthContext);

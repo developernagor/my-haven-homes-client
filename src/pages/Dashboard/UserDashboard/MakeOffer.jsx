@@ -3,59 +3,47 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../providers/AuthProvider';
 import axios from 'axios';
 
-const MakeOffer = ({}) => {
-    const {user} = useContext(AuthContext)
-    console.log(user)
-    const navigate = useNavigate()
+const MakeOffer = () => {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const { state: property } = useLocation();
   const [offerAmount, setOfferAmount] = useState('');
   const [buyingDate, setBuyingDate] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const buyer = {
-    email: user.email, 
-    name: user.displayName, 
+    email: user.email,
+    name: user.displayName,
   };
-  console.log(property)
 
-  const handleOfferSubmit = async(e) => {
+  if (!property) {
+    return <div>Property data not found</div>;
+  }
+
+  const handleOfferSubmit = async (e) => {
     e.preventDefault();
-    const [minPrice, maxPrice] = property.priceRange.replace(/\$|,/g, '').split(' - ').map(Number);
-
-    if (offerAmount < minPrice || offerAmount > maxPrice) {
-      setError(`Offer must be between $${minPrice} and $${maxPrice}.`);
-      return;
+    setLoading(true); // Start loading indicator
+  
+    try {
+      const offerData = {
+        propertyId: property._id,
+        propertyLocation: property.propertyLocation,
+        propertyTitle: property.title,
+        propertyImage: property.propertyImage,
+        agentName: property.agentName,
+        offerAmount: Number(offerAmount),
+        buyingDate,
+        buyer,
+        status: 'pending',
+      };
+  
+      await axios.post(`${import.meta.env.VITE_API_URL}/offers`, offerData);
+      setLoading(false); // End loading
+      // ... rest of your code
+    } catch (error) {
+      setLoading(false); // End loading on error
+      setError(error.response?.data?.message || 'Failed to submit the offer. Please try again.');
     }
-    // if (user.role !== 'customer') {
-    //     setError('Only users can make an offer.');
-    //     return;
-    //   }
-      try {
-        const offerData = {
-          propertyId: property._id,
-          propertyLocation: property.propertyLocation,
-          propertyTitle: property.title,
-          propertyImage: property.propertyImage,
-          agentName: property.agentName,
-          offerAmount,
-          buyingDate,
-          buyer,
-          status: 'pending',
-        };
-  
-        await axios.post('http://localhost:5000/offers', offerData);
-  
-        console.log('Offer submitted:', offerData);
-        setError('');
-        navigate('/dashboard/property-bought');
-      } catch (error) {
-        console.error('Error submitting offer:', error);
-        setError('Failed to submit the offer. Please try again.');
-      }
-
-    // Save to database logic here
-    console.log('Offer submitted:', { property, offerAmount, buyingDate, buyer });
-    setError('');
-    // Add further navigation or state updates here
   };
 
   return (
@@ -106,9 +94,9 @@ const MakeOffer = ({}) => {
         </div>
         {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="text-center">
-          <button type="submit" className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-700">
-            Submit Offer
-          </button>
+        <button type="submit" className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-700" disabled={loading}>
+  {loading ? 'Submitting...' : 'Submit Offer'}
+</button>
         </div>
       </form>
     </div>
