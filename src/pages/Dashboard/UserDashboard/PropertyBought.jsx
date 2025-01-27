@@ -6,7 +6,7 @@ import { AuthContext } from '../../../providers/AuthProvider';
 function PropertyBought() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
-  console.log(selectedProperty)
+  // console.log(selectedProperty)
 
   const { user } = useContext(AuthContext);
 
@@ -22,13 +22,13 @@ function PropertyBought() {
   });
 
   const handlePurchase = (property) => {
-    console.log(property)
+    // console.log(property)
     setSelectedProperty(property);
     setModalOpen(true);
   };
 
   const handleConfirmPurchase = () => {
-    console.log('Purchase confirmed for:', selectedProperty);
+    // console.log('Purchase confirmed for:', selectedProperty);
     setModalOpen(false);
   };
 

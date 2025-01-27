@@ -53,7 +53,7 @@ const ContactForm = () => {
         setIsSubmitting(false);
       }
     // For demonstration, we'll just log the data to the console.
-    console.log('Form data submitted:', formData);
+    // console.log('Form data submitted:', formData);
 
     
   };

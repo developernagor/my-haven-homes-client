@@ -9,7 +9,7 @@ function AdminProfile() {
         role,
         timestamp
     } = user;
-  console.log(user)
+//   console.log(user)
 
     if (!user) {
         return <div>Loading user information...</div>;

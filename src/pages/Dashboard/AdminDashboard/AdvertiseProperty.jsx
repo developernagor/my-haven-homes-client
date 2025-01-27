@@ -9,7 +9,7 @@ function AdvertiseProperty() {
         queryKey:['properties'],
         queryFn: async() => {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/properties/verified`);
-            console.log(res)
+            // console.log(res)
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -27,7 +27,7 @@ function AdvertiseProperty() {
     if (error) {
         return <div>Error: {error.message}</div>;
     }
-    console.log(properties) 
+    // console.log(properties) 
 
     const handleAddAdvertise = async(property) => {
         // const advertisement = {

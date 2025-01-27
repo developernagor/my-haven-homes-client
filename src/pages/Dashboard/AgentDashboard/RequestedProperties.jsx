@@ -13,7 +13,7 @@ function RequestedProperties() {
     queryKey: ["offers"],
     queryFn: async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/offers`);
-      console.log(res);
+      // console.log(res);
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
@@ -26,13 +26,13 @@ function RequestedProperties() {
   if (error) {
     return `Error: ${error.message}`;
   }
-  console.log(offers);
+  // console.log(offers);
 
   const handleAcceptOffer = async(id) => {
-    console.log(id)
+    // console.log(id)
     axios.patch(`${import.meta.env.VITE_API_URL}/offers-accepted/${id}`)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.modifiedCount > 0) {
           refetch();
           Swal.fire({
@@ -49,10 +49,10 @@ function RequestedProperties() {
       });
   }
   const handleRejectOffer = async(id) => {
-    console.log(id)
+    // console.log(id)
     axios.patch(`${import.meta.env.VITE_API_URL}/offers-rejected/${id}`)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.modifiedCount > 0) {
           refetch();
           Swal.fire({

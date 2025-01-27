@@ -64,7 +64,7 @@ function PurchaseModal({ isOpen, onClose, selectedProperty, onConfirmPurchase })
       }
 
       const updatedOffer = await res.json();
-      console.log('Offer status updated:', updatedOffer);
+      // console.log('Offer status updated:', updatedOffer);
 
       // Close the modal and notify parent component
       onConfirmPurchase();

@@ -40,8 +40,9 @@ function Navbar() {
 
 
     return (
-        <div className="navbar bg-white sticky top-0 z-10 px-10 ">
-  <div className="navbar-start">
+        <div className="navbar justify-between bg-white sticky top-0 z-10 px-10 ">
+  <div className="">
+
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
         <svg
@@ -63,15 +64,17 @@ function Navbar() {
         {links}
       </ul>
     </div>
-    <Link to='/'><img src={logo} alt="" /></Link>
-    <Link to='/' className='text-2xl ml-4'>Haven Homes</Link>
+
+    <Link to='/'><img src={logo} alt="" className='hidden lg:block' /></Link>
+    <Link to='/' className='text-2xl font-semibold lg:ml-4'>Haven Homes</Link>
   </div>
-  <div className="navbar-center hidden lg:flex">
-    <ul className="menu menu-horizontal px-1 gap-6">
+
+  <div className=" hidden md:flex">
+    <ul className="menu menu-horizontal px-1 gap-2 md:gap-2 lg:gap-6">
       {links}
     </ul>
   </div>
-  <div className="navbar-end">
+  <div className="">
   {user ? (
           <div className="flex items-center gap-3">
             <div className="tooltip" data-tip={user?.displayName || "User"}>

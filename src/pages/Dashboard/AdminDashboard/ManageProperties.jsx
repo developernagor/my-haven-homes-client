@@ -3,6 +3,7 @@ import axios from 'axios';
 
 function ManageProperties() {
   const [properties, setProperties] = useState([]);
+  // console.log(properties)
   
   // Fetch properties initially from API
   const fetchProperties = async () => {
@@ -65,7 +66,7 @@ function ManageProperties() {
               <td className="border p-2">{property.location}</td>
               <td className="border p-2">{property.agentName}</td>
               <td className="border p-2">{property.agentEmail}</td>
-              <td className="border p-2">{property.priceRange}</td>
+              <td className="border p-2">$ {property.minimumPrice}-{property.maximumPrice}</td>
               <td className="border p-2">
                 {property.status === 'verified' ? (
                   <span className="text-green-500">Verified</span>

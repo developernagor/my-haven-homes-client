@@ -54,7 +54,9 @@ const queryClient = new QueryClient()
         },
         {
           path: '/properties/:id',
-          element: <PropertyDetails></PropertyDetails>
+          element: <PrivateRoute>
+            <PropertyDetails></PropertyDetails>
+          </PrivateRoute>
         },
         {
           path: '/login',

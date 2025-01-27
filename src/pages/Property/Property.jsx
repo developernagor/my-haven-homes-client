@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function Property({property}) {
-    console.log(property)
+    // console.log(property)
     const {
         _id,agentEmail,agentImage, agentName, image, location,status, maximumPrice, minimumPrice,title
     } = property;
@@ -15,13 +15,13 @@ function Property({property}) {
             <h2 className='text-xl'>Status: {status}</h2>
             <h2 className='text-xl'>Price Range: $ {minimumPrice} - $ {maximumPrice}</h2>
             
-            <div className='flex items-center gap-4 my-3'>
+            <div className='flex items-center gap-4 my-3 overflow-x-scroll'>
             <img src={agentImage || 'default-image-url.jpg'} alt={`Agent ${agentName}`} className='rounded-lg'/>
 
-            <div>
-                <h2 className='font-semibold text-xl mb-1'>Agent Info:</h2>
+            <div className='overflow-y-visible'>
+                <h2 className='font-semibold text-xl mb-1 '>Agent Info:</h2>
             <h2> {agentName}</h2>
-            <h2> {agentEmail}</h2>
+            <h2 className='overflow-hidden'> {agentEmail}</h2>
             </div>
             </div>
             

@@ -48,7 +48,7 @@ function PropertyDetails() {
             agentImage: property.agentImage,
             status: property.status
         };
-        console.log(wishlistData)
+        // console.log(wishlistData)
 
         // Save to wishlist in the database
         try {
@@ -70,7 +70,7 @@ function PropertyDetails() {
 
     const {
         _id,title,description,image,agentName,agentEmail,location,minimumPrice,maximumPrice} = property;
-    console.log(property)
+    // console.log(property)
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">

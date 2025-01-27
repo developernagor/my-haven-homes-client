@@ -12,8 +12,8 @@ function AddReviewModal({property, propertyId, onClose }) {
         agentName: property.agentName,
         
     });
-    console.log(reviewData)
-    console.log(property)
+    // console.log(reviewData)
+    // console.log(property)
     const [error, setError] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,7 +49,7 @@ function AddReviewModal({property, propertyId, onClose }) {
             agentName: reviewData.agentName,
             propertyTitle: reviewData.propertyTitle
         };
-        console.log(review)
+        // console.log(review)
 
         try {
             await axios.post(`${import.meta.env.VITE_API_URL}/reviews`, review);

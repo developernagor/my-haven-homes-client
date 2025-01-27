@@ -8,7 +8,7 @@ import { AuthContext } from '../../providers/AuthProvider';
 
 function Dashboard() {
     const {user: loginUser} = useContext(AuthContext);
-    console.log(loginUser)
+    // console.log(loginUser)
     
 
     const {isPending, data: users} = useQuery({
@@ -24,13 +24,13 @@ function Dashboard() {
     if(isPending){
         return 'loading......'
     }
-    console.log(users)
+    // console.log(users)
 
 
     return (
         <div>
             {users.map((user) => {
-                console.log(user)
+                // console.log(user)
                 if (loginUser?.email == user?.email && user.role === 'customer') {
                     return <UserDashboard key={user._id} user={user} />;
                 } else if (loginUser?.email == user?.email && user.role === 'agent') {

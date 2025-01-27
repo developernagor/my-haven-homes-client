@@ -21,7 +21,7 @@ function MySoldProperties() {
         return <div>Error: {error.message}</div>;
     }
 
-    console.log(offers)
+    // console.log(offers)
     return (
         <div className="p-4">
             <h2 className="text-xl font-bold mb-4">My Sold Properties</h2>

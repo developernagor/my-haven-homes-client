@@ -22,7 +22,17 @@ const MakeOffer = () => {
 
   const handleOfferSubmit = async (e) => {
     e.preventDefault();
+    const minPrice = property.minimumPrice;
+    const maxPrice = property.maximumPrice;
+
+    if (offerAmount < minPrice || offerAmount > maxPrice) {
+      setError(`Offer amount must be between $${minPrice} and $${maxPrice}.`);
+      return;
+    }
+
+
     setLoading(true); // Start loading indicator
+    setError(''); // Reset error
   
     try {
       const offerData = {
@@ -39,6 +49,7 @@ const MakeOffer = () => {
   
       await axios.post(`${import.meta.env.VITE_API_URL}/offers`, offerData);
       setLoading(false); // End loading
+      navigate('/dashboard/property-bought');
       // ... rest of your code
     } catch (error) {
       setLoading(false); // End loading on error
@@ -64,7 +75,9 @@ const MakeOffer = () => {
             <input type="text" value={property.agentName} readOnly className="w-full border rounded-lg px-4 py-2" />
           </div>
           <div>
-            <label className="block text-gray-700">Offer Amount:</label>
+            <label className="block text-gray-700">
+              Offer Amount (Between ${property.minPrice} and ${property.maxPrice}):
+            </label>
             <input
               type="number"
               value={offerAmount}
@@ -94,9 +107,13 @@ const MakeOffer = () => {
         </div>
         {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="text-center">
-        <button type="submit" className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-700" disabled={loading}>
-  {loading ? 'Submitting...' : 'Submit Offer'}
-</button>
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-700"
+            disabled={loading}
+          >
+            {loading ? 'Submitting...' : 'Submit Offer'}
+          </button>
         </div>
       </form>
     </div>

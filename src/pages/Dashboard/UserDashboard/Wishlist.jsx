@@ -62,7 +62,7 @@ function Wishlist() {
                 }
             });
         } catch (error) {
-            console.log('Error removing property', error);
+            // console.log('Error removing property', error);
         }
     };
     

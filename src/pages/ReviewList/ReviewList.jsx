@@ -32,7 +32,7 @@ function ReviewList({ propertyId }) {
     if (reviews.length === 0) {
         return <p>No reviews yet. Be the first to add one!</p>;
     }
-console.log(reviews)
+// console.log(reviews)
     return (
         <div className="mt-6">
             <h2 className="text-2xl font-bold mb-4">All Reviews</h2>

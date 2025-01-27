@@ -9,7 +9,7 @@ function ManageUsers() {
         queryKey:['users'],
         queryFn: async()=> {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/users`);
-            console.log(res)
+            // console.log(res)
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -22,13 +22,13 @@ function ManageUsers() {
     if (error) {
         return `Error: ${error.message}`;
     }
-    console.log(users)
+    // console.log(users)
 
 
     const handleMakeAdmin = user => {
       axios.patch(`${import.meta.env.VITE_API_URL}/users/admin/${user._id}`)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.modifiedCount > 0) {
           refetch();
           Swal.fire({
@@ -47,7 +47,7 @@ function ManageUsers() {
     const handleMakeAgent = user => {
       axios.patch(`${import.meta.env.VITE_API_URL}/users/agent/${user._id}`)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.modifiedCount > 0) {
           refetch();
           Swal.fire({
@@ -66,7 +66,7 @@ function ManageUsers() {
     const handleMarkAsFraud = user => {
       axios.patch(`${import.meta.env.VITE_API_URL}/users/fraud/${user._id}`)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.result.modifiedCount > 0) {
           refetch();
           Swal.fire({

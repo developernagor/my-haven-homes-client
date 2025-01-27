@@ -13,6 +13,7 @@ function AddProperty() {
     location: "",
     image: null,
     description:"",
+    status: 'pending',
     minimumPrice: parseInt(""),
     maximumPrice: parseInt(""),
   });
@@ -79,7 +80,7 @@ function AddProperty() {
         body: JSON.stringify(finalPropertyData),
       });
       const result = await response.json();
-      console.log(result);
+      // console.log(result);
       if (result.success) {
         setSuccess('Property Added Successfully.');
         form.reset();
@@ -87,7 +88,7 @@ function AddProperty() {
     } catch (error) {
       console.error("Error uploading image or submitting form:", error);
     }
-    console.log(propertyData);
+    // console.log(propertyData);
   };
 
   return (

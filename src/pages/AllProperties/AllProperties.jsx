@@ -13,7 +13,7 @@ function AllProperties() {
         queryKey: ['properties'],
         queryFn: async()=> {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/properties`);
-            console.log(res)
+            // console.log(res)
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }

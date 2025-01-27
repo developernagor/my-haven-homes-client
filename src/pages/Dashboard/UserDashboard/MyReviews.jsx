@@ -6,13 +6,13 @@ import axios from 'axios';
 
 function MyReviews() {
     const { user } = useContext(AuthContext);
-    console.log(user);
+    // console.log(user);
     
     const { isLoading, data: myReviews, error } = useQuery({
         queryKey: ['myReviews'],
         queryFn: async () => {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/reviews/${user?.email}`);
-            console.log(res);
+            // console.log(res);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -26,7 +26,7 @@ function MyReviews() {
     if (error) {
         return <div className="text-center py-8">Error: {error.message}</div>;
     }
-    console.log(myReviews);
+    // console.log(myReviews);
 
     const handleDeleteReview = (id) => {
         Swal.fire({

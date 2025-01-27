@@ -1,58 +1,74 @@
-import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
 
 const LatestReview = () => {
-  const [recentReviews, setRecentReviews] = useState([])
+  const [recentReviews, setRecentReviews] = useState([]);
 
-const {isPending, data:reviews} = useQuery({
-  queryKey: ['reviews'],
-  queryFn: async()=> {
+  const { isPending, isError, data: reviews } = useQuery({
+    queryKey: ["reviews"],
+    queryFn: async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/reviews`);
-      console.log(res)
       if (!res.ok) {
-          throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
       return res.json();
+    },
+  });
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="loader border-t-4 border-blue-500 w-12 h-12 rounded-full animate-spin"></div>
+      </div>
+    );
   }
-});
 
-if(isPending){
-  return 'loading......'
-}
+  if (isError) {
+    return (
+      <div className="text-center text-red-600">
+        Failed to load reviews. Please try again later.
+      </div>
+    );
+  }
 
-console.log(reviews)
-const mostRecentReviews = [...reviews]
-.sort((a,b) => new Date(b.reviewTime) - new Date(a.reviewTime))
-.slice(0,6);
-console.log(mostRecentReviews)
+  const mostRecentReviews = [...reviews]
+    .sort((a, b) => new Date(b.reviewTime) - new Date(a.reviewTime))
+    .slice(0, 6);
 
   return (
-    <div className="px-4 py-10 bg-gray-100">
+    <div className="px-2 sm:px-4 py-10 bg-gray-100">
       <h2 className="text-3xl font-bold text-center mb-8">Latest User Reviews</h2>
       {mostRecentReviews.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mostRecentReviews.map((review, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden p-6">
+          {mostRecentReviews.map((review) => (
+            <div
+              key={review.id || review.reviewerName}
+              className="bg-white rounded-lg shadow-md overflow-hidden p-6"
+            >
               <div className="flex items-center">
-                {/* Uncomment and use if you have images */}
-                {/* <img
-                  src={review.image}
-                  alt={`${review.reviewerName}`}
+                <img
+                  src={review.reviewerImage || "/placeholder.jpg"}
+                  alt={review.reviewerName || "User"}
                   className="w-16 h-16 rounded-full object-cover mr-4"
-                /> */}
+                />
                 <div>
-                  <h3 className="text-xl font-semibold">{review.reviewerName}</h3>
-                  <img src={review.reviewerImage} alt="" />
-                  <p className="text-gray-600 text-sm">{review.propertyTitle}</p>
+                  <h3 className="text-xl font-semibold">
+                    {review.reviewerName || "Anonymous"}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {review.propertyTitle || "No Property Title"}
+                  </p>
                 </div>
               </div>
-              <p className="mt-4 text-gray-700">{review.comment}</p>
-              <p className="mt-4 text-gray-700">{new Date(review.reviewTime).toLocaleString()}</p>
+              <p className="mt-4 text-gray-700">{review.comment || "No comment provided."}</p>
+              <p className="mt-4 text-gray-500 text-sm">
+                {new Date(review.reviewTime).toLocaleString()}
+              </p>
             </div>
           ))}
         </div>
       ) : (
-        <div className="text-center py-10">No Reviews Data Found.</div>
+        <div className="text-center py-10 text-gray-600">No Reviews Data Found.</div>
       )}
     </div>
   );

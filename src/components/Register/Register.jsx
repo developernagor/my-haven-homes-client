@@ -55,7 +55,7 @@ const Register = () => {
       // Create user with Firebase
       const userCredential = await createUser(email, password);
       const user = userCredential.user;
-      console.log(userCredential, user)
+      // console.log(userCredential, user)
   
       // Update profile with displayName and photoURL
       await updateProfile(user, {
@@ -64,7 +64,7 @@ const Register = () => {
       });
   
       setSuccess("User registered successfully!");
-      console.log("User created:", { name, email, photoURL });
+      // console.log("User created:", { name, email, photoURL });
   
       // Reset form and navigate
       form.reset();

@@ -13,7 +13,7 @@ const Login = () => {
     const [loginError, setLoginError] = useState("")
     const location = useLocation();
     const navigate = useNavigate();
-    console.log('in signIn page', location)
+    // console.log('in signIn page', location)
     const from = location.state || '/';
 
     const handleSignIn = e => {
@@ -21,7 +21,7 @@ const Login = () => {
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password);
+        // console.log(email, password);
 
         setSuccess(false);
         setLoginError('');
@@ -33,7 +33,7 @@ const Login = () => {
                 navigate(from);
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 setLoginError(error.message);
             })
 
